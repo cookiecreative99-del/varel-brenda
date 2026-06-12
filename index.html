@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Wedding Invitation</title>
+
+<meta property="og:title" content="Wedding Invitation">
+<meta property="og:description" content="Varel & Brenda">
+<meta property="og:image" content="https://varel-brenda.vercel.app/preview.jpg">
+<meta property="og:url" content="https://varel-brenda.vercel.app">
+<meta property="og:type" content="website">
+<meta property="og:image:width" content="1080">
+<meta property="og:image:height" content="1080">
+
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Cinzel', serif;
+}
+
+body{
+  width:100%;
+  min-height:100vh;
+  overflow:hidden;
+  background:#a8a39d;
+}
+
+.cover{
+  width:100%;
+  height:100vh;
+  position:relative;
+  background:url('background.jpg') center center/cover no-repeat;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:40px 24px;
+  transition:opacity 1s ease;
+}
+
+.cover.fade-out{
+  opacity:0;
+}
+
+.overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.05);
+}
+
+.content{
+  position:relative;
+  z-index:2;
+  width:100%;
+  max-width:400px;
+  text-align:center;
+  color:#000;
+  transform:translateY(220px);
+}
+
+.label{
+  font-size:15px;
+  margin-bottom:14px;
+  letter-spacing:1px;
+  opacity:0;
+  transform:translateY(20px);
+  animation:fadeUp 1s ease forwards;
+  animation-delay:.2s;
+}
+
+.guest-name{
+  font-size:38px;
+  font-weight:600;
+  line-height:1.3;
+  margin-bottom:30px;
+  word-break:break-word;
+  opacity:0;
+  transform:translateY(20px);
+  animation:fadeUp 1s ease forwards;
+  animation-delay:.6s;
+}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:58px;
+  background:#494c3b;
+  color:#fff;
+  border-radius:999px;
+  text-decoration:none;
+  font-size:20px;
+  font-weight:600;
+  box-shadow:0 10px 30px rgba(0,0,0,.12);
+  opacity:0;
+  transform:translateY(20px);
+  animation:fadeUp 1s ease forwards;
+  animation-delay:1s;
+}
+
+@keyframes fadeUp{
+  from{
+    opacity:0;
+    transform:translateY(20px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+#canvaContainer{
+  display:none;
+  width:100%;
+  min-height:100vh;
+}
+
+#musicToggle{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  width:52px;
+  height:52px;
+  border:none;
+  border-radius:50%;
+  background:rgba(0,0,0,.75);
+  color:#fff;
+  font-size:20px;
+  cursor:pointer;
+  z-index:9999;
+  display:none;
+}
+
+@media(max-width:480px){
+
+  .content{
+    transform:translateY(200px);
+  }
+
+  .guest-name{
+    font-size:32px;
+  }
+
+  .btn{
+    height:54px;
+    font-size:18px;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<audio id="bgMusic" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<button id="musicToggle">🔊</button>
+
+<section class="cover">
+
+  <div class="overlay"></div>
+
+  <div class="content">
+
+    <div class="label">
+      Dear,
+    </div>
+
+    <div class="guest-name" id="guestName">
+      Nama Tamu
+    </div>
+
+    <a href="#" class="btn" id="openBtn">
+      Buka Undangan
+    </a>
+
+  </div>
+
+</section>
+
+<div id="canvaContainer">
+
+  <div style="
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-top: 1792.1669%;
+    padding-bottom: 0;
+    overflow: hidden;">
+
+    <iframe
+      loading="lazy"
+      style="
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      border: none;
+      margin: 0;
+      padding: 0;"
+      src="https://www.canva.com/design/DAHMX0gPh3w/fvHSecya3_MkMJkXaxTr8Q/view?embed"
+      allowfullscreen
+      allow="fullscreen">
+    </iframe>
+
+  </div>
+
+</div>
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+const guest = params.get("to");
+
+if(guest){
+  document.getElementById("guestName").innerText =
+    decodeURIComponent(guest);
+}
+
+const music = document.getElementById("bgMusic");
+const musicBtn = document.getElementById("musicToggle");
+const cover = document.querySelector(".cover");
+const canvaContainer = document.getElementById("canvaContainer");
+
+document.getElementById("openBtn")
+.addEventListener("click", function(e){
+
+  e.preventDefault();
+
+  music.play().catch(function(err){
+    console.log(err);
+  });
+
+  cover.classList.add("fade-out");
+
+  setTimeout(function(){
+
+    cover.style.display = "none";
+
+    canvaContainer.style.display = "block";
+
+    musicBtn.style.display = "block";
+
+    document.body.style.overflow = "auto";
+
+  },1000);
+
+});
+
+musicBtn.addEventListener("click", function(){
+
+  if(music.paused){
+
+    music.play();
+    musicBtn.innerHTML = "🔊";
+
+  }else{
+
+    music.pause();
+    musicBtn.innerHTML = "🔇";
+
+  }
+
+});
+
+</script>
+
+</body>
+</html>
